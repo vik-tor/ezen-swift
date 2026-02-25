@@ -1,6 +1,6 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 
-import type { SessionUser } from '$lib/shared/types/user';
+import type { SessionUser } from '$lib/shared/types/domain/user';
 
 // for information about these interfaces
 declare global {

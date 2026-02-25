@@ -1,29 +1,37 @@
 <script lang="ts">
-	import { mdiPencil, mdiPlus, mdiTrashCanOutline } from '@mdi/js';
+	import { mdiPencil, mdiPlus, mdiTrashCanOutline, mdiUploadOutline } from '@mdi/js';
 
 	import { Page } from '$lib/components';
 	import type { PageConfig } from '$lib/shared/types';
 
 	let { data } = $props();
+
 	let dialogOpen = $state(false);
 
 	let config: PageConfig = {
-		title: 'Contact Groups',
+		title: 'Contacts',
 		headerActions: [
 			{
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
-				label: 'Add Contact Group',
+				label: 'Add',
 				onClick: () => {
 					dialogOpen = true;
 				}
+			},
+			{
+				icon: mdiUploadOutline,
+				iconClass: 'btn-secondary',
+				label: 'Import',
+				href: '/client/contacts/import'
 			}
 		],
 		columns: [
 			{ label: 'Name', key: 'name' },
-			{ label: 'Description', key: 'description' }
+			{ label: 'Phone Number', key: 'phone' },
+			{ label: 'Groups', key: 'groups' }
 		],
-		dataKey: 'contactGroups',
+		dataKey: 'contacts',
 		rowActions: [
 			{
 				name: 'Edit',
@@ -39,7 +47,7 @@
 			}
 		],
 		form: {
-			title: 'Add Contact Group',
+			title: 'Add Contact',
 			action: 'default',
 			fields: [
 				{
@@ -49,9 +57,10 @@
 					required: true
 				},
 				{
-					name: 'description',
-					label: 'Description',
-					type: 'textarea'
+					name: 'phone',
+					label: 'Phone Number',
+					type: 'text',
+					required: true
 				}
 			],
 			onCancel: () => {
@@ -61,4 +70,4 @@
 	};
 </script>
 
-<Page {data} {config} {dialogOpen} />
+<Page {config} {data} {dialogOpen} />

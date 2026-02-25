@@ -1,4 +1,4 @@
-import type { Role } from './roles';
+import type { Role } from './domain/roles';
 
 export type NavLink = {
 	href?: string;
@@ -9,3 +9,9 @@ export type NavLink = {
 	separator?: boolean;
 	children?: NavLink[];
 };
+
+export interface SelectOptions<T = unknown> {
+	name: string | number;
+	value: T;
+	selected?: boolean;
+}

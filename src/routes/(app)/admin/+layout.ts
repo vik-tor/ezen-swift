@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
-import { Roles } from '$lib/shared/types/roles';
+import { Roles } from '$lib/shared/types/domain/roles';
 
 export const load: LayoutLoad = async ({ parent }) => {
 	const { roles } = await parent();

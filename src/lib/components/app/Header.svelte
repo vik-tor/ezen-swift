@@ -4,11 +4,13 @@
 	let { title, children }: { title: string; children?: Snippet } = $props();
 </script>
 
-<header class="bg-background sticky top-0 z-30 flex items-center gap-4 px-6">
+<header
+	class="sticky top-0 z-30 flex items-center gap-2 rounded-lg border-b border-base-300 bg-base-100/10 p-6 py-2.5 backdrop-blur-lg"
+>
 	<div class="flex-1">
-		<h1 class="text-foreground text-xl">{title}</h1>
+		<h1 class="text-xl">{title}</h1>
 	</div>
-	<div class="flex items-center gap-4">
+	<div class="flex items-center gap-2">
 		{@render children?.()}
 	</div>
 </header>

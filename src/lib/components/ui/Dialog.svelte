@@ -34,10 +34,14 @@
 </script>
 
 {#if open}
-	<div class="fixed inset-0 z-30 bg-black/5" onclick={close} role="presentation"></div>
+	<div
+		class="fixed inset-0 z-30 bg-base-300/10 backdrop-blur-xs"
+		onclick={close}
+		role="presentation"
+	></div>
 	<div
 		class={[
-			'fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 bg-base-100 shadow-lg duration-200 sm:rounded-lg md:w-full',
+			'fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border border-base-300 bg-base-200 shadow-lg duration-200 sm:rounded-lg md:w-full',
 			sizeClass,
 			className
 		]}

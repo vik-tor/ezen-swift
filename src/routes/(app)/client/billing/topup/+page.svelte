@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Header from '$lib/components/app/Header.svelte';
+	import { Header } from '$lib/components';
 
 	let { data } = $props();
 </script>

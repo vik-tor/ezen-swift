@@ -1,6 +1,6 @@
 import { apiFetch } from '$lib/client';
-import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/paginate';
-import type { Role } from '$lib/shared/types/roles';
+import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/page/paginate';
+import type { Role } from '$lib/shared/types/domain/roles';
 
 export interface User {
 	id: number;

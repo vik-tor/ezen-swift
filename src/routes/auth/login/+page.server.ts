@@ -1,5 +1,5 @@
 import { API_BASE } from '$lib/client';
-import { Roles } from '$lib/shared/types/roles';
+import { Roles } from '$lib/shared/types/domain/roles';
 import { userStore } from '$lib/server/stores/users.instance';
 import { redirect, fail, type Actions, type ServerLoad } from '@sveltejs/kit';
 

@@ -19,7 +19,7 @@
 		mdiWalletPlus
 	} from '@mdi/js';
 
-	import { Roles } from '$lib/shared/types/roles';
+	import { Roles } from '$lib/shared/types';
 	import type { NavLink } from '$lib/shared/types/ui';
 	import type { Snippet } from 'svelte';
 

@@ -27,7 +27,7 @@
 
 <Header title="Compose Text Message"></Header>
 
-<div class="mt-4 flex w-full flex-col p-6 pt-2">
+<div class="flex w-full flex-col p-6 pt-2">
 	<hr class="my-1 border-base-300" />
 
 	<div class="flex justify-between gap-8">
@@ -62,7 +62,7 @@
 
 				{#if recipientType === 'groups'}
 					<FormGroup>
-						<Select name="contactGroupIds" id="groups" multiple>
+						<Select name="contactGroupIds" id="groups">
 							{#each data.contactGroups as contactGroup}
 								<option value={contactGroup.id}>{contactGroup.name}</option>
 							{/each}

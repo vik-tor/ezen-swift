@@ -39,13 +39,13 @@
 			label: 'Contacts',
 			children: [
 				{
-					href: '/client/contacts/groups',
-					label: 'Contact Groups',
+					href: '/client/contacts/list',
+					label: 'Contacts',
 					icon: mdiAccountMultipleOutline
 				},
 				{
-					href: '/client/contacts/import',
-					label: 'Import Contacts',
+					href: '/client/contacts/groups',
+					label: 'Contact Groups',
 					icon: mdiAccountMultipleOutline
 				}
 			]

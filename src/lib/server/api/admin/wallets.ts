@@ -1,5 +1,5 @@
 import { apiFetch } from '$lib/client';
-import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/paginate';
+import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/page/paginate';
 
 export async function refundUsersWallet(
 	fetch: typeof globalThis.fetch,

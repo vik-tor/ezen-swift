@@ -1,6 +1,6 @@
 import { apiFetchSafe, type ApiResult } from '$lib/client';
-import type { CurrentRatesWithHistory } from '$lib/shared/types/bands';
-import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/paginate';
+import type { CurrentRatesWithHistory } from '$lib/shared/types/domain/bands';
+import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/page/paginate';
 
 export interface WalletTransaction {
 	id: number;

@@ -1,5 +1,5 @@
 import { apiFetchSafe, type ApiResult } from '$lib/client';
-import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/paginate';
+import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/page/paginate';
 
 export interface ContactGroup {
 	id: number;

@@ -10,7 +10,7 @@
 
 <tr
 	class={[
-		'hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-base-300 transition-colors',
+		'border-b border-base-300 transition-colors hover:bg-base-200/50 data-[state=selected]:bg-base-200',
 		className
 	]}
 	{...rest}

@@ -1,13 +1,15 @@
 <script lang="ts">
-	import Header from '$lib/components/app/Header.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
-	import CardContent from '$lib/components/ui/CardContent.svelte';
-	import CardDescription from '$lib/components/ui/CardDescription.svelte';
-	import CardHeader from '$lib/components/ui/CardHeader.svelte';
-	import CardTitle from '$lib/components/ui/CardTitle.svelte';
-	import Input from '$lib/components/ui/Input.svelte';
-	import Label from '$lib/components/ui/Label.svelte';
+	import {
+		Button,
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle,
+		Header,
+		Input,
+		Label
+	} from '$lib/components';
 
 	let { data } = $props();
 

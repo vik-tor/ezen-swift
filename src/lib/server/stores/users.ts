@@ -1,4 +1,4 @@
-import type { SessionUser } from '$lib/shared/types/user';
+import type { SessionUser } from '$lib/shared/types/domain/user';
 
 export class UserStore {
 	private users = new Map<string, SessionUser>();

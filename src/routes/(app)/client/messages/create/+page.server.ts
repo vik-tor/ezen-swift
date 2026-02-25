@@ -5,7 +5,7 @@ import { fetchContactGroups, type ContactGroup } from '$lib/server/api/client/gr
 import { fetchSenderIds } from '$lib/server/api/client/sender-ids';
 import { createSMSCampaign, type SMSCampaignRequest } from '$lib/server/api/client/sms';
 import { fetchMessageTemplates, type MessageTemplate } from '$lib/server/api/client/templates';
-import type { SenderId } from '$lib/shared/types/sender-id';
+import type { SenderId } from '$lib/shared/types/domain/sender-id';
 
 interface CampaignsPageData {
 	senderIds: SenderId[];

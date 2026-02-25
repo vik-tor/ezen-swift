@@ -9,7 +9,7 @@
 	let { variant = 'vertical', class: className, children, ...rest }: Props = $props();
 
 	const variants = {
-		vertical: 'flex flex-col gap-1',
+		vertical: 'flex flex-col gap-2',
 		horizontal: 'flex flex-row gap-2 items-center'
 	};
 </script>

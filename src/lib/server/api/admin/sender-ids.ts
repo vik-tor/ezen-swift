@@ -1,6 +1,6 @@
 import { apiFetch } from '$lib/client';
-import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/paginate';
-import type { SenderId } from '$lib/shared/types/sender-id';
+import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/page/paginate';
+import type { SenderId } from '$lib/shared/types/domain/sender-id';
 
 export async function reviewSenderId(
 	fetch: typeof globalThis.fetch,

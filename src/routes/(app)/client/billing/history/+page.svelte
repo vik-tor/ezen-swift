@@ -1,60 +1,74 @@
 <script lang="ts">
-	import Header from '$lib/components/app/Header.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
-	import CardContent from '$lib/components/ui/CardContent.svelte';
-	import CardHeader from '$lib/components/ui/CardHeader.svelte';
-	import CardTitle from '$lib/components/ui/CardTitle.svelte';
-	import Table from '$lib/components/ui/Table.svelte';
-	import TableBody from '$lib/components/ui/TableBody.svelte';
-	import TableCell from '$lib/components/ui/TableCell.svelte';
-	import TableHead from '$lib/components/ui/TableHead.svelte';
-	import TableHeader from '$lib/components/ui/TableHeader.svelte';
-	import TableRow from '$lib/components/ui/TableRow.svelte';
+	import { mdiAlertCircleOutline } from '@mdi/js';
+
+	import {
+		Alert,
+		Button,
+		Header,
+		Icon,
+		Table,
+		TableBody,
+		TableCell,
+		TableHead,
+		TableHeader,
+		TableRow,
+		Page
+	} from '$lib/components';
+	import type { PageConfig } from '$lib/shared/types';
 
 	let { data } = $props();
 	let dialogOpen = $state(false);
+
+	let config: PageConfig = {
+		title: 'Billing History',
+		columns: [
+			{ label: 'Type', key: 'type' },
+			{ label: 'Description', key: 'description' },
+			{ label: 'Amount', key: 'amount' },
+			{ label: 'Reference', key: 'reference' }
+		],
+		dataKey: 'transactions'
+	};
 </script>
 
-<Header title="Billing History"></Header>
+<Page {config} {data} />
+
+<!-- <Header title="Billing History"></Header> -->
 
 <!-- <Filters /> -->
 
-{#if data.apiError}
-	<Card class="mt-6 border-error bg-error/50">
-		<CardHeader>
-			<CardTitle>Error Loading Billing History</CardTitle>
-		</CardHeader>
-		<CardContent>
-			<p>{data.apiError.message}</p>
-			<p>{data.apiError.status}</p>
-		</CardContent>
-	</Card>
+<!-- {#if data.apiError}
+	<Alert class="alert-soft alert-error">
+		<Icon path={mdiAlertCircleOutline} size={18} class="text-error" />
+		<span class="text-error">
+			{data.apiError.message ??
+				'An error occurred while fetching billing rates. Please try again later.'}
+		</span>
+		<Button variant="ghost" on:click={() => window.location.reload()}>Reload</Button>
+	</Alert>
 {/if}
 
-<Card class="mt-6">
-	<CardContent>
-		<Table>
-			<TableHeader>
+<div class="">
+	<Table>
+		<TableHeader>
+			<TableRow>
+				<TableHead>Type</TableHead>
+				<TableHead>Description</TableHead>
+				<TableHead>Amount</TableHead>
+				<TableHead>Reference</TableHead>
+				<TableHead>Actions</TableHead>
+			</TableRow>
+		</TableHeader>
+		<TableBody>
+			{#each data.transactions as item}
 				<TableRow>
-					<TableHead>Type</TableHead>
-					<TableHead>Description</TableHead>
-					<TableHead>Amount</TableHead>
-					<TableHead>Reference</TableHead>
-					<TableHead>Actions</TableHead>
+					<TableCell>{item.type}</TableCell>
+					<TableCell>{item.description}</TableCell>
+					<TableCell>{item.amount}</TableCell>
+					<TableCell>{item.reference}</TableCell>
+					<TableCell><Button variant="ghost">Edit</Button></TableCell>
 				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{#each data.transactions as item}
-					<TableRow>
-						<TableCell>{item.type}</TableCell>
-						<TableCell>{item.description}</TableCell>
-						<TableCell>{item.amount}</TableCell>
-						<TableCell>{item.reference}</TableCell>
-						<TableCell><Button variant="ghost">Edit</Button></TableCell>
-					</TableRow>
-				{/each}
-			</TableBody>
-		</Table>
-	</CardContent>
-</Card>
+			{/each}
+		</TableBody>
+	</Table>
+</div> -->

@@ -2,7 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import { applySenderId, fetchSenderIds } from '$lib/server/api/client/sender-ids';
-import type { SenderIdRequest } from '$lib/shared/types/sender-id';
+import type { SenderIdRequest } from '$lib/shared/types/domain/sender-id';
 
 export const load: PageServerLoad = async ({ fetch, locals }) => {
 	const senderIdRes = await fetchSenderIds(fetch, locals);

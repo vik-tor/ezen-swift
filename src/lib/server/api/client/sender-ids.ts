@@ -1,5 +1,5 @@
 import { apiFetchSafe, type ApiResult } from '$lib/client';
-import type { SenderId, SenderIdRequest } from '$lib/shared/types/sender-id';
+import type { SenderId, SenderIdRequest } from '$lib/shared/types/domain/sender-id';
 
 export async function fetchSenderIds(
 	fetch: typeof globalThis.fetch,

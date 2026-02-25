@@ -9,7 +9,10 @@
 </script>
 
 <div class="relative w-full overflow-auto">
-	<table class={['table w-full caption-bottom text-sm', className]} {...rest}>
+	<table
+		class={['table w-full caption-bottom border border-base-300 text-sm', className]}
+		{...rest}
+	>
 		{@render children?.()}
 	</table>
 </div>

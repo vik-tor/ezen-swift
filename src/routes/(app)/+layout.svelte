@@ -97,8 +97,10 @@
 		</header>
 
 		<!-- Page Content -->
-		<main class="flex-1 overflow-y-auto p-4 md:p-8">
-			{@render children()}
+		<main class="flex-1 overflow-y-auto p-4">
+			<div class="flex h-full flex-1 flex-col gap-2.5 rounded-lg p-4">
+				{@render children()}
+			</div>
 		</main>
 
 		<!-- <div class="fixed right-6 bottom-6 z-50">
@@ -164,7 +166,7 @@
 					<a
 						href={child.href}
 						class="block rounded-lg px-4 py-1.5 text-sm transition hover:bg-base-200 {isActive &&
-							'bg-primary text-primary-content'}"
+							'bg-primary text-primary-content hover:bg-primary hover:text-primary-content'}"
 					>
 						<div class="flex items-center">
 							<Icon path={child.icon!} size={16} class="mr-2" />

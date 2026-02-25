@@ -1,6 +1,6 @@
 import { apiFetchSafe, type ApiResult } from '$lib/client';
-import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/paginate';
-import type { SenderIdCategory } from '$lib/shared/types/sender-id';
+import type { PaginatedResponse, PaginationParams } from '$lib/shared/types/page/paginate';
+import type { SenderIdCategory } from '$lib/shared/types/domain/sender-id';
 
 export interface MessageTemplate {
 	id: number;
