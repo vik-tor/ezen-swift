@@ -1,5 +1,5 @@
 import { API_URL } from '$env/static/private';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Redirect } from '@sveltejs/kit';
 
 export const API_BASE = `${API_URL}/api/v1`;
 
@@ -45,27 +45,31 @@ export async function apiFetch<T>(
 		const e = err as Error | undefined;
 		// Abort (timeout) vs network-level failures
 		if (e?.name === 'AbortError') {
+			console.log('504: Request aborted (timeout):', err);
 			throw new ApiError('Request aborted (timeout)', 504);
 		}
 		// Generic network error (server not found/unresponsive, DNS, offline)
+		console.log('503: Network error: could not reach API:', err);
 		throw new ApiError(e?.message ?? 'Network error: could not reach API', 503);
 	}
 
 	let payload: ApiResponse<T>;
-
 	try {
 		payload = await res.json();
 	} catch {
+		console.log(`${res.status}: Malformed response from server`);
 		throw new ApiError('Malformed response from server', res.status);
 	}
 
 	// Handle 401 Unauthorized - session expired
 	if (res.status === 401) {
+		console.log(`${res.status}: Unauthorized - session expired`);
 		throw redirect(303, '/auth/login?expired=true');
 	}
 
 	// Transport-level (HTTP, 4xx / 5xx) failure
 	if (!res.ok) {
+		console.log(`${res.status}: Transport-level failure - External API request failed`);
 		throw new ApiError(
 			payload?.message || 'External API request failed',
 			res.status,
@@ -76,6 +80,7 @@ export async function apiFetch<T>(
 
 	// API-level failure (API returned non-success status)
 	if (payload.status !== 200) {
+		console.log(`${payload.status}: API-level failure - API returned non-success status`);
 		throw new ApiError(payload.message, payload.status, payload.data, payload.timestamp);
 	}
 
@@ -98,14 +103,22 @@ export async function apiFetchSafe<T>(
 		const data = await apiFetch<T>(fetch, locals, path, init);
 		return { ok: true, data };
 	} catch (err) {
+		if (isRedirect(err)) {
+			throw err;
+		}
+
 		if (err instanceof ApiError) {
 			return { ok: false, error: err };
 		}
 
-		const maybeErr = err as Error | undefined;
+		const maybe = err as Error | undefined;
 		return {
 			ok: false,
-			error: new ApiError(maybeErr?.message ?? 'Unknown error', 500)
+			error: new ApiError(maybe?.message ?? 'Unknown error', 500)
 		};
 	}
+}
+
+function isRedirect(value: unknown): value is Redirect {
+	return typeof value === 'object' && value !== null && 'status' in value && 'location' in value;
 }

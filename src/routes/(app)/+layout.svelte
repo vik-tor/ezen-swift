@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { mdiAccount, mdiHelpCircle, mdiLogout } from '@mdi/js';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import { mdiHelpCircle, mdiLogout } from '@mdi/js';
 
-	import Icon from '$lib/components/ui/Icon.svelte';
 	import AdminNav from '$lib/components/app/AdminNav.svelte';
 	import ClientNav from '$lib/components/app/ClientNav.svelte';
+	import Icon from '$lib/components/ui/Icon.svelte';
 	import { type NavLink } from '$lib/shared/types/ui';
 
 	let { children, data } = $props();
 
 	const isAdmin = page.url.pathname.startsWith('/admin');
 	const isClient = page.url.pathname.startsWith('/client');
-	const isActive = $derived(page.url.pathname);
 
 	let sidebarOpen = $state(false);
 
@@ -47,12 +47,12 @@
 			{/if}
 
 			<div class="mt-auto mb-4 px-4">
-				<a href="/profile" class="block rounded-lg px-4 py-2 transition hover:bg-base-300">
-					<div class="flex items-center">
-						<Icon path={mdiAccount} size={20} class="mr-2" />
-						{data.user!.username}
-					</div>
-				</a>
+				<!-- {@render linkBlock(
+					'/profile',
+					data.user!.username,
+					mdiAccount,
+					page.url.pathname === '/profile'
+				)} -->
 				<form method="POST" action="/logout">
 					<button
 						class="block w-full rounded-lg px-4 py-2 text-left text-sm transition hover:cursor-pointer hover:bg-base-300"
@@ -97,58 +97,18 @@
 		</header>
 
 		<!-- Page Content -->
-		<main class="flex-1 overflow-y-auto p-4">
+		<main class="h-full flex-1 overflow-y-auto p-4">
 			<div class="flex h-full flex-1 flex-col gap-2.5 rounded-lg p-4">
 				{@render children()}
 			</div>
 		</main>
-
-		<!-- <div class="fixed right-6 bottom-6 z-50">
-			<button class="h-10 w-10 rounded-full shadow-lg">
-				<Icon path={mdiHelpCircle} size={28} />
-			</button>
-		</div> -->
 	</div>
 </div>
 
 {#snippet navLink(link: NavLink)}
-	<!-- {#if link.roles && link.roles.some((role) => data.user!.roles.includes(role))}
-		{#if link.separator}
-			<div class="my-4 border-2 border-t border-red-300">
-				{#if link.label}
-					<span class="bg-base-100 px-2 text-sm font-semibold text-base-content/70">
-						{link.label}
-					</span>
-				{/if}
-			</div>
-		{:else if link.spacer}
-			<div class="my-2 border-t border-red-300">There</div>
-		{:else}
-			<a href={link.href} class="block rounded-lg px-4 py-2 transition hover:bg-base-300">
-				<div class="flex items-center">
-					<Icon path={link.icon!} size={16} class="mr-2" />
-					{link.label}
-				</div>
-			</a>
-			{#if link.children}
-				<div class="ml-6 space-y-1">
-					{#each link.children as child}
-						<a
-							href={child.href}
-							class="block rounded-lg px-4 py-2 text-sm transition hover:bg-base-300"
-						>
-							<div class="flex items-center">
-								<Icon path={child.icon!} size={16} class="mr-2" />
-								{child.label}
-							</div>
-						</a>
-					{/each}
-				</div>
-			{/if}
-		{/if}
-	{/if} -->
-
-	{#if link.children && link.children.length > 0}
+	{#if link.spacer}
+		<div class="my-4 border-b border-gray-600/20"></div>
+	{:else if link.children && link.children.length > 0}
 		<div class="mt-4">
 			{#if link.label}
 				<span class="px-2 text-xs font-semibold text-base-content/70 uppercase">
@@ -158,23 +118,32 @@
 		</div>
 
 		<div class="space-y-1">
-			{#each link.children as child}
+			{#each link.children as child (child.href)}
 				{@const isActive = page.url.pathname === child.href}
-				{#if child.spacer}
-					<div class="my-2 border-b border-gray-400/20"></div>
-				{:else}
-					<a
-						href={child.href}
-						class="block rounded-lg px-4 py-1.5 text-sm transition hover:bg-base-200 {isActive &&
-							'bg-primary text-primary-content hover:bg-primary hover:text-primary-content'}"
-					>
-						<div class="flex items-center">
-							<Icon path={child.icon!} size={16} class="mr-2" />
-							{child.label}
-						</div>
-					</a>
+				{@const disabled = child.role && data.user && !data.user.roles.includes(child.role)}
+				<!-- <span>Disabled: {disabled}; Role: {child.role};</span> -->
+				{#if !disabled}
+					{@render linkBlock(child.href, child.label, child.icon, isActive)}
 				{/if}
 			{/each}
 		</div>
+	{:else}
+		{@const isActive = page.url.pathname === link.href}
+		{@render linkBlock(link.href, link.label, link.icon, isActive)}
+	{/if}
+{/snippet}
+
+{#snippet linkBlock(href?: string, label?: string, icon?: string, isActive?: boolean)}
+	{#if href}
+		<a
+			href={resolve(href as unknown)}
+			class="block rounded-lg px-4 py-1.5 text-sm transition hover:bg-base-300 hover:text-primary
+			 {isActive && 'bg-primary text-primary-content hover:bg-primary hover:text-primary-content'}"
+		>
+			<div class="flex items-center">
+				<Icon path={icon!} size={16} class="mr-2" />
+				{label}
+			</div>
+		</a>
 	{/if}
 {/snippet}

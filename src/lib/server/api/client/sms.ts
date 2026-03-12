@@ -21,12 +21,12 @@ export interface SMSCampaign {
 }
 
 export interface SMSCampaignRequest {
-	name: string;
+	// name: string;
 	senderIdId: number;
-	templateId: number;
+	templateId?: number;
 	customMessage: string;
-	contactGroupIds: number[];
-	manualRecipients: string[];
+	contactGroupIds?: number[];
+	manualRecipients?: string;
 	scheduledTime: string;
 }
 

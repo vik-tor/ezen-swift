@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiPencil, mdiPlus, mdiSend } from '@mdi/js';
+	import { mdiPencil, mdiPlus, mdiTrashCanOutline } from '@mdi/js';
 
 	import { Page } from '$lib/components';
 	import type { PageConfig } from '$lib/shared/types';
@@ -18,26 +18,36 @@
 		dataKey: 'templates',
 		headerActions: [
 			{
+				name: 'create',
 				label: 'Add Template',
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
-				onClick: () => (dialogOpen = true)
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Add Template',
+					formAction: 'create'
+				}
 			}
 		],
 		rowActions: [
 			{
-				name: 'Edit',
+				name: 'edit',
 				icon: mdiPencil,
-				action: 'edit'
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Edit Template',
+					formAction: 'edit',
+					loadEntity: true
+				}
 			},
 			{
-				name: 'Use Template',
-				icon: mdiSend,
-				onClick: () => {}
+				name: 'delete',
+				icon: mdiTrashCanOutline,
+				iconClass: 'btn-error btn-soft',
+				serverAction: 'delete'
 			}
 		],
 		form: {
-			title: 'Add Template',
 			fields: [
 				{
 					name: 'name',
@@ -62,7 +72,7 @@
 					required: true
 				}
 			],
-			action: 'default'
+			onCancel: () => (dialogOpen = false)
 		}
 	};
 </script>

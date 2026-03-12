@@ -6,7 +6,6 @@ import type { SenderIdRequest } from '$lib/shared/types/domain/sender-id';
 
 export const load: PageServerLoad = async ({ fetch, locals }) => {
 	const senderIdRes = await fetchSenderIds(fetch, locals);
-
 	if (!senderIdRes.ok) {
 		return {
 			senderIds: [],
@@ -15,8 +14,6 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 	}
 
 	const senderIds = senderIdRes.data;
-	console.log('Fetched sender IDs:', senderIds);
-
 	return { senderIds };
 };
 

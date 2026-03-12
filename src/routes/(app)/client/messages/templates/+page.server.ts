@@ -14,17 +14,14 @@ interface TemplatesPageResponse {
 
 export const load: PageServerLoad = async ({ fetch, locals }): Promise<TemplatesPageResponse> => {
 	const templateRes = await fetchMessageTemplates(fetch, locals);
-
 	if (!templateRes.ok) {
-		console.log('Failed to fetch message templates:', templateRes.error);
 		return {
 			templates: [],
 			apiError: { message: templateRes.error?.message, status: templateRes.error?.status }
 		};
 	}
-	const templates = templateRes.data.content;
-	console.log('Fetched message templates:', templates);
 
+	const templates = templateRes.data.content;
 	return { templates };
 };
 

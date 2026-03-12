@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
+	import { FormGroup, Input, Label } from '$lib/components';
 </script>
 
 <div class="flex flex-col gap-8">
@@ -8,31 +11,41 @@
 	</div>
 	<form method="POST" class="space-y-6">
 		<div class="space-y-4">
-			<div class="space-y-1">
-				<label for="username" class="label">Username <span class="text-error">*</span></label>
-				<input id="username" name="username" type="text" required class="input w-full" />
+			<FormGroup>
+				<Label for="name" class="label">Name <span class="text-error">*</span></Label>
+				<Input id="name" name="name" type="text" required class="input w-full" />
+			</FormGroup>
+			<div class="flex w-full items-center gap-2">
+				<FormGroup class="w-full">
+					<Label for="email" class="label">Email <span class="text-error">*</span></Label>
+					<Input id="email" name="email" type="email" required class="input w-full" />
+				</FormGroup>
+				<FormGroup class="w-full">
+					<Label for="username" class="label">Username</Label>
+					<Input id="username" name="username" type="text" class="input w-full" />
+				</FormGroup>
 			</div>
-			<div class="space-y-1">
-				<label for="email" class="label">Email <span class="text-error">*</span></label>
-				<input id="email" name="email" type="email" required class="input w-full" />
-			</div>
-			<div class="flex items-center gap-2">
-				<div class="space-y-1">
-					<label for="password" class="label"> Password <span class="text-error">*</span></label>
-					<input id="password" name="password" type="password" required class="input w-full" />
-				</div>
-				<div class="space-y-1">
-					<label for="confirm-password" class="label">
-						Confirm Password <span class="text-error">*</span></label
+			<FormGroup>
+				<Label for="contact" class="label">Phone <span class="text-error">*</span></Label>
+				<Input id="contact" name="contact" type="text" required class="input w-full" />
+			</FormGroup>
+			<div class="flex w-full items-center gap-2">
+				<FormGroup class="w-full">
+					<Label for="password" class="label">Password <span class="text-error">*</span></Label>
+					<Input id="password" name="password" type="password" required class="input w-full" />
+				</FormGroup>
+				<FormGroup class="w-full">
+					<Label for="confirm-password" class="label">
+						Confirm Password <span class="text-error">*</span></Label
 					>
-					<input
+					<Input
 						id="confirm-password"
 						name="confirm-password"
 						type="password"
 						required
 						class="input w-full"
 					/>
-				</div>
+				</FormGroup>
 			</div>
 		</div>
 		<button type="submit" class="btn w-full btn-primary">Create Account</button>
@@ -46,6 +59,6 @@
 	<hr class="border-base-300" />
 	<div class="text-center text-sm text-base-content/60">
 		Already have an account?
-		<a href="/auth/login" class="text-primary hover:underline">Sign In</a>
+		<a href={resolve('/auth/login')} class="text-primary hover:underline">Sign In</a>
 	</div>
 </div>

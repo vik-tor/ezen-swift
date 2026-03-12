@@ -1,12 +1,12 @@
-import { apiFetch } from '$lib/client';
+import { apiFetchSafe, type ApiResult } from '$lib/client';
 import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/page/paginate';
 
 export async function refundUsersWallet(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	params: { amount: number; description: string; userId: number }
-): Promise<void> {
-	await apiFetch(
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(
 		fetch,
 		locals,
 		`/wallets/${params.userId}/refund?amount=${params.amount}&description=${params.description}`,
@@ -20,8 +20,8 @@ export async function resetUsersWallet(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	userId: number
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/users/${userId}/reset-wallet`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/wallets/users/${userId}/reset-wallet`, {
 		method: 'POST'
 	});
 }
@@ -30,8 +30,8 @@ export async function generateUsersWallet(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	userId: number
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/users/${userId}/generate-wallet`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/wallets/users/${userId}/generate-wallet`, {
 		method: 'POST'
 	});
 }
@@ -41,10 +41,15 @@ export async function reverseWalletTransaction(
 	locals: App.Locals,
 	transactionId: number,
 	reason: string
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/transactions/${transactionId}/reverse?reason=${reason}`, {
-		method: 'POST'
-	});
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(
+		fetch,
+		locals,
+		`/wallets/transactions/${transactionId}/reverse?reason=${reason}`,
+		{
+			method: 'POST'
+		}
+	);
 }
 
 export async function cancelReverseWalletTransaction(
@@ -52,10 +57,15 @@ export async function cancelReverseWalletTransaction(
 	locals: App.Locals,
 	transactionId: number,
 	reason: string
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/transactions/${transactionId}/reverse?reason=${reason}`, {
-		method: 'POST'
-	});
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(
+		fetch,
+		locals,
+		`/wallets/transactions/${transactionId}/cancel-reverse?reason=${reason}`,
+		{
+			method: 'POST'
+		}
+	);
 }
 
 export interface WalletMigrationStats {
@@ -66,11 +76,12 @@ export interface WalletMigrationStats {
 	message: string;
 }
 
+/* Place this in Admin settings */
 export async function migrateWallets(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals
-): Promise<WalletMigrationStats> {
-	return apiFetch<WalletMigrationStats>(fetch, locals, '/wallets/migrate', {
+): Promise<ApiResult<WalletMigrationStats>> {
+	return apiFetchSafe<WalletMigrationStats>(fetch, locals, '/wallets/migrate', {
 		method: 'POST'
 	});
 }
@@ -99,8 +110,8 @@ export async function approveManualTopupRequest(
 	locals: App.Locals,
 	requestId: number,
 	note: string
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/manual-topups/${requestId}/approve?note=${note}`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/wallets/manual-topups/${requestId}/approve?note=${note}`, {
 		method: 'POST'
 	});
 }
@@ -110,10 +121,15 @@ export async function rejectManualTopupRequest(
 	locals: App.Locals,
 	requestId: number,
 	reason: string
-): Promise<void> {
-	await apiFetch(fetch, locals, `/wallets/manual-topups/${requestId}/reject?reason=${reason}`, {
-		method: 'POST'
-	});
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(
+		fetch,
+		locals,
+		`/wallets/manual-topups/${requestId}/reject?reason=${reason}`,
+		{
+			method: 'POST'
+		}
+	);
 }
 
 export async function manualTopupRequest(
@@ -131,8 +147,8 @@ export async function manualTopupRequest(
 		| 'approvedById'
 		| 'approvedByUsername'
 	>
-): Promise<void> {
-	await apiFetch(fetch, locals, '/wallets/manual-topup-request', {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, '/wallets/manual-topup-request', {
 		method: 'POST',
 		body: JSON.stringify(topUpData)
 	});
@@ -142,16 +158,16 @@ export async function getUserWalletBalance(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	userId: number
-): Promise<number> {
-	return apiFetch(fetch, locals, `wallets/${userId}`);
+): Promise<ApiResult<number>> {
+	return apiFetchSafe(fetch, locals, `wallets/${userId}`);
 }
 
 export async function fetchManualTopups(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	params?: PaginationParams
-): Promise<PaginatedResponse<ManualTopUp>> {
-	return apiFetch<PaginatedResponse<ManualTopUp>>(
+): Promise<ApiResult<PaginatedResponse<ManualTopUp>>> {
+	return apiFetchSafe<PaginatedResponse<ManualTopUp>>(
 		fetch,
 		locals,
 		`/wallets/manual-topups/pending?${new URLSearchParams(params as Record<string, string>).toString()}`

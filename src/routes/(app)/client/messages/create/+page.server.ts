@@ -51,14 +51,16 @@ export const actions: Actions = {
 	default: async ({ request, locals }) => {
 		const form = await request.formData();
 		const formData: SMSCampaignRequest = {
-			name: form.get('name') as string,
+			// name: form.get('name') as string,
 			senderIdId: Number(form.get('senderIdId')),
-			templateId: Number(form.get('templateId')),
+			// templateId: Number(form.get('templateId')),
 			customMessage: form.get('customMessage') as string,
 			contactGroupIds: (form.getAll('contactGroupIds') as string[]).map(Number),
-			manualRecipients: (form.get('manualRecipients') as string).split(',').map((s) => s.trim()),
+			manualRecipients: form.get('manualRecipients') as string,
 			scheduledTime: form.get('scheduledTime') as string
 		};
+
+		console.log('Form Data:', formData);
 
 		const res = await createSMSCampaign(fetch, locals, formData);
 		if (res instanceof Error) {

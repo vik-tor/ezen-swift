@@ -17,15 +17,7 @@
 			{ label: 'Change Reason', key: 'changeReason' },
 			{ label: 'Changed At', key: 'changedAt' }
 		],
-		dataKey: 'history',
-		rowActions: [
-			{
-				name: 'Edit',
-				icon: mdiPencil,
-				iconClass: 'btn-ghost',
-				onClick: () => {}
-			}
-		]
+		dataKey: 'history'
 	};
 </script>
 

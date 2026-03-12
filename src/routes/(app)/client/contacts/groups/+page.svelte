@@ -11,11 +11,14 @@
 		title: 'Contact Groups',
 		headerActions: [
 			{
+				name: 'create',
+				label: 'Add Contact Group',
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
-				label: 'Add Contact Group',
-				onClick: () => {
-					dialogOpen = true;
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Add Contact Group',
+					formAction: 'create'
 				}
 			}
 		],
@@ -26,16 +29,20 @@
 		dataKey: 'contactGroups',
 		rowActions: [
 			{
-				name: 'Edit',
+				name: 'edit',
 				icon: mdiPencil,
 				iconClass: 'btn-ghost',
-				onClick: () => {}
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Edit Contact Group',
+					formAction: 'update'
+				}
 			},
 			{
-				name: 'Delete',
+				name: 'delete',
 				icon: mdiTrashCanOutline,
 				iconClass: 'btn-error btn-soft',
-				onClick: () => {}
+				serverAction: 'delete'
 			}
 		],
 		form: {

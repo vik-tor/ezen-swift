@@ -17,8 +17,6 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 	}
 
 	const contactGroups = groupRes.data.content;
-	console.log('Fetched contact groups:', contactGroups);
-
 	return { contactGroups };
 };
 

@@ -1,14 +1,30 @@
-import { apiFetch } from '$lib/client';
+import { apiFetchSafe, type ApiResult } from '$lib/client';
 import type { PaginationParams, PaginatedResponse } from '$lib/shared/types/page/paginate';
 import type { Role } from '$lib/shared/types/domain/roles';
+
+export interface AuthUser {
+	id: number;
+	username: string;
+	email: string;
+	roles: Role[];
+	createdAt: string;
+	updatedAt: string;
+	balance?: number | null; // Add balance field to User interface
+}
 
 export interface User {
 	id: number;
 	username: string;
 	email: string;
-	role: 'admin' | 'user';
+	enabled: boolean;
+	locked: boolean;
+	failedAttempts: number;
+	lockTime?: string;
+	roles: Role[];
+	clientCode: string;
+	hasApprovedSenderId?: boolean;
 	createdAt: string;
-	updatedAt: string;
+	walletBalance?: number;
 }
 
 export interface RoleData {
@@ -19,9 +35,9 @@ export interface RoleData {
 export async function fetchUsers(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
-	params: PaginationParams & { role?: string; search?: string }
-): Promise<PaginatedResponse<User>> {
-	return apiFetch<PaginatedResponse<User>>(
+	params?: PaginationParams & { role?: string; search?: string }
+): Promise<ApiResult<PaginatedResponse<User>>> {
+	return apiFetchSafe<PaginatedResponse<User>>(
 		fetch,
 		locals,
 		`/admin/users?${new URLSearchParams(params as Record<string, string>).toString()}`
@@ -43,8 +59,8 @@ export async function assignUserRole(
 	locals: App.Locals,
 	userId: number,
 	newRole: Role
-): Promise<void> {
-	await apiFetch(fetch, locals, `/admin/roles/assign`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/admin/roles/assign`, {
 		method: 'POST',
 		body: JSON.stringify({ userId: userId, roleName: newRole })
 	});
@@ -55,8 +71,8 @@ export async function unassignUserRole(
 	locals: App.Locals,
 	userId: number,
 	role: string
-): Promise<void> {
-	await apiFetch(fetch, locals, `/admin/roles/unassign`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/admin/roles/unassign`, {
 		method: 'POST',
 		body: JSON.stringify({ userId: userId, roleName: role })
 	});
@@ -81,8 +97,8 @@ export function lockUser(
 	locals: App.Locals,
 	userId: number,
 	reason: string
-): Promise<void> {
-	return apiFetch(fetch, locals, `/admin/users/${userId}/lock`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/admin/users/${userId}/lock`, {
 		method: 'POST',
 		body: JSON.stringify({ reason: reason })
 	});
@@ -92,8 +108,8 @@ export function unlockUser(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	userId: number
-): Promise<void> {
-	return apiFetch(fetch, locals, `/admin/unlock/${userId}`, {
+): Promise<ApiResult<void>> {
+	return apiFetchSafe(fetch, locals, `/admin/unlock/${userId}`, {
 		method: 'POST'
 	});
 }
@@ -102,9 +118,9 @@ export function exportUsers(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals,
 	format: 'pdf' | 'excel',
-	params: { role?: string; search?: string }
-): Promise<Blob> {
-	return apiFetch<Blob>(
+	params?: { role?: string; search?: string }
+): Promise<ApiResult<string>> {
+	return apiFetchSafe(
 		fetch,
 		locals,
 		`/admin/users/export/${format}?${new URLSearchParams(params as Record<string, string>).toString()}`,
@@ -117,6 +133,6 @@ export function exportUsers(
 export async function fetchRoles(
 	fetch: typeof globalThis.fetch,
 	locals: App.Locals
-): Promise<RoleData[]> {
-	return apiFetch<RoleData[]>(fetch, locals, '/admin/roles');
+): Promise<ApiResult<RoleData[]>> {
+	return apiFetchSafe<RoleData[]>(fetch, locals, '/admin/roles');
 }

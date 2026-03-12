@@ -10,11 +10,11 @@ export type { SessionUser } from './domain/user';
 export type { WalletTransaction } from './domain/wallet';
 export type {
 	PageConfig,
+	Action,
+	ActionContext,
 	Form,
 	Field,
-	HeaderAction,
 	TableColumn,
-	RowAction,
 	FieldType,
 	FieldTypeMap
 } from './page/config';

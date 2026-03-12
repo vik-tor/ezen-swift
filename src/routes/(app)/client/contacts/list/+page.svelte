@@ -12,17 +12,21 @@
 		title: 'Contacts',
 		headerActions: [
 			{
+				name: 'create',
+				label: 'Add Contact',
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
-				label: 'Add',
-				onClick: () => {
-					dialogOpen = true;
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Add Contact',
+					formAction: 'create'
 				}
 			},
 			{
+				name: 'import',
+				label: 'Import',
 				icon: mdiUploadOutline,
 				iconClass: 'btn-secondary',
-				label: 'Import',
 				href: '/client/contacts/import'
 			}
 		],
@@ -34,16 +38,22 @@
 		dataKey: 'contacts',
 		rowActions: [
 			{
-				name: 'Edit',
+				name: 'edit',
+				label: 'Edit Contact',
 				icon: mdiPencil,
 				iconClass: 'btn-ghost',
-				onClick: () => {}
+				onClick: () => (dialogOpen = true),
+				context: {
+					title: 'Edit Contact',
+					formAction: 'edit'
+				}
 			},
 			{
-				name: 'Delete',
+				name: 'delete',
+				label: 'Delete',
 				icon: mdiTrashCanOutline,
 				iconClass: 'btn-error btn-soft',
-				onClick: () => {}
+				serverAction: 'delete'
 			}
 		],
 		form: {

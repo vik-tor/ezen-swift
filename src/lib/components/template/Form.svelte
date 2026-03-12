@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mdiCancel, mdiClose, mdiContentSaveOutline } from '@mdi/js';
+	import { mdiCancel, mdiContentSaveOutline } from '@mdi/js';
 
 	import type { Form } from '$lib/shared/types';
 	import { Button, Icon } from '..';
@@ -8,13 +8,14 @@
 
 	interface Props {
 		form: Form;
+		action: string;
 	}
 
-	let { form }: Props = $props();
+	let { form, action }: Props = $props();
 </script>
 
-<form method="POST" action={form.action} class="flex flex-col gap-2.5">
-	{#each form.fields as field}
+<form method="POST" {action} class="flex flex-col gap-2.5">
+	{#each form.fields as field (field.name)}
 		<Field {field} />
 	{/each}
 

@@ -18,6 +18,7 @@
 		dataKey: 'senderIds',
 		headerActions: [
 			{
+				name: 'create',
 				label: 'Request New Sender ID',
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
@@ -25,7 +26,7 @@
 			}
 		],
 		form: {
-			title: 'Add Template',
+			title: 'Request New Sender ID',
 			fields: [
 				{
 					name: 'name',

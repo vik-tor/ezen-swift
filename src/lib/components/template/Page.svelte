@@ -1,138 +1,150 @@
 <script lang="ts">
-	import type { PageConfig } from '$lib/shared/types';
-	import { mdiAlertCircleOutline } from '@mdi/js';
+	import type { Action, ActionContext, PageConfig } from '$lib/shared/types';
 	import {
 		Button,
 		CardContent,
 		CardHeader,
 		CardTitle,
-		Checkbox,
+		Confirm,
+		DataTable,
 		Dialog,
 		Header,
-		Icon,
-		Table,
-		TableBody,
-		TableCell,
-		TableHead,
-		TableHeader,
-		TableRow
+		Icon
 	} from '..';
 	import Form from './Form.svelte';
 
 	interface Props {
 		config: PageConfig;
-		data?: any;
+		data?: unknown;
 		children?: import('svelte').Snippet;
 		dialogOpen?: boolean;
 	}
 
 	let { config, data, children, dialogOpen = $bindable(false) }: Props = $props();
+
+	let confirmDialogOpen = $state(false);
+	let confirmMessage = $state('');
+	let pendingAction: Action | null = $state(null);
+
+	function openConfirmDialog(action: Action) {
+		pendingAction = action;
+		confirmMessage = action.confirmationMessage ?? 'Are you sure?';
+		confirmDialogOpen = true;
+	}
+
+	function handleConfirmation(confirmed: boolean) {
+		if (confirmed && pendingAction) {
+			performAction(pendingAction);
+		}
+		pendingAction = null;
+		confirmDialogOpen = false;
+	}
+
+	let dialogContext: ActionContext = $state({
+		title: '',
+		formAction: '',
+		loadEntity: false
+	});
+
+	function openFormDialog(context: ActionContext) {
+		dialogContext = context;
+		dialogOpen = true;
+	}
+
+	function handleActionClick(action: Action) {
+		if (action.confirmed) {
+			openConfirmDialog(action);
+		} else {
+			performAction(action);
+		}
+	}
+
+	function performAction(action: Action) {
+		/*
+		 * An action can either be a server action, or a local one
+		 * In both cases, it can be confirmed or not
+		 * If it has context, that has to be changed as it's performed
+		 * If it is batch, all selected items are passed to the runner
+		 */
+
+		// Create/Edit actions, with context, open the dialog
+		if ((action.name == 'create' || action.name == 'edit') && action.context) {
+			openFormDialog(action.context);
+		}
+
+		// Server action (with context)
+		if (action.serverAction) {
+			console.log('Handling server action', action.serverAction);
+		}
+
+		// Local action
+		if (action.onClick) {
+			action.onClick();
+		}
+	}
 </script>
 
-<Header title={config.title}>
-	{#if config.headerActions}
-		{#each config.headerActions as action}
-			{#if action.href}
-				<a class={`btn btn-sm ${action.iconClass}`} href={action.href}>
-					{#if action.icon}
-						<Icon path={action.icon} size={16} />
-					{/if}
-					{action.label}
-				</a>
-			{:else}
-				<Button class={`btn-sm ${action.iconClass}`} onclick={() => action.onClick?.()}>
-					{#if action.icon}
-						<Icon path={action.icon} size={16} />
-					{/if}
-					{action.label}
-				</Button>
-			{/if}
-		{/each}
-	{/if}
-</Header>
-
-<div class="flex flex-col gap-2">
-	<div class="">
-		{@render children?.()}
-	</div>
-	<div class="">
-		{#if config.columns}
-			{#if config.tableTitle}
-				<div class="mt-2 mb-4 px-6">{config.tableTitle}</div>
-			{/if}
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead class="w-12">
-							<Checkbox></Checkbox>
-						</TableHead>
-						{#each config.columns as column}
-							<TableHead>{column.label}</TableHead>
-						{/each}
-						{#if config.rowActions}
-							<TableHead class="w-20"></TableHead>
-						{/if}
-						<TableHead></TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{#if data.apiError}
-						<TableRow>
-							<TableCell class="col-span-8" colspan={6}>
-								<div class="my-4 flex items-center justify-center gap-2">
-									<Icon path={mdiAlertCircleOutline} size={18} class="text-error" />
-									<div class="flex flex-col">
-										<div class="font-semibold text-error">Error While Loading Data</div>
-										<div class="">{data.apiError.status} {data.apiError.message}</div>
-									</div>
-								</div>
-							</TableCell>
-						</TableRow>
-					{:else if config.dataKey}
-						{#each data[config.dataKey] as row}
-							<TableRow>
-								<TableCell>
-									<Checkbox></Checkbox>
-								</TableCell>
-								{#each config.columns as column}
-									<TableCell>{row[column.key]}</TableCell>
-								{/each}
-								<TableCell class="">
-									{#if config.rowActions}
-										<div class="flex items-center gap-2">
-											{#each config.rowActions as action}
-												<Button
-													class={`px-1 text-sm btn-xs ${action.iconClass}`}
-													onclick={() => action.onClick?.()}
-												>
-													{#if action.icon}
-														<Icon path={action.icon} size={12} />
-													{/if}
-													{#if action.showName}
-														{action.name}
-													{/if}
-												</Button>
-											{/each}
-										</div>
-									{/if}
-								</TableCell>
-							</TableRow>
-						{/each}
-					{/if}
-				</TableBody>
-			</Table>
+<div class="flex h-full flex-1 flex-col">
+	<Header title={config.title}>
+		{#if config.headerActions}
+			{#each config.headerActions as action (action.name)}
+				{@render renderAction(action)}
+			{/each}
 		{/if}
+	</Header>
+
+	<div class="flex h-full flex-col gap-2">
+		<div class="">
+			{@render children?.()}
+		</div>
+		<div class="h-full grow overflow-hidden rounded-lg border border-base-300">
+			{#if config.columns}
+				{#if config.tableTitle}
+					<div class="mt-2 mb-4 px-6">{config.tableTitle}</div>
+				{/if}
+				<DataTable {config} {data} {renderAction} />
+			{/if}
+		</div>
 	</div>
 </div>
 
 {#if config.form}
-	{@const form = config.form}
+	{@const context = {
+		title: dialogContext.title ?? config.form.title,
+		formAction: dialogContext.formAction ?? config.form.action
+	}}
 	<Dialog bind:open={dialogOpen} class="bg-base-100">
 		<CardHeader>
-			<CardTitle>{form.title}</CardTitle>
+			<CardTitle>{context.title}</CardTitle>
 		</CardHeader>
 		<CardContent>
-			<Form {form} />
+			<Form form={config.form} action={context.formAction} />
 		</CardContent>
 	</Dialog>
 {/if}
+
+<Confirm bind:open={confirmDialogOpen} onConfirm={(confirmed) => handleConfirmation(confirmed)}>
+	<div class="p-4">{confirmMessage}</div>
+</Confirm>
+
+{#snippet renderAction(action: Action)}
+	{#if action.href}
+		<a class={`btn text-sm btn-sm ${action.iconClass}`} href={action.href}>
+			{#if action.icon}
+				<Icon path={action.icon} size={16} />
+			{/if}
+			{#if action.label}
+				{action.label}
+			{/if}
+		</a>
+	{:else}
+		<Button class={`text-sm btn-sm ${action.iconClass}`} onclick={() => handleActionClick(action)}>
+			{#if action.icon}
+				<Icon path={action.icon} size={16} />
+			{/if}
+			{#if action.label}
+				{action.label}
+			{/if}
+		</Button>
+	{/if}
+{/snippet}

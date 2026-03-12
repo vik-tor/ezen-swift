@@ -4,8 +4,6 @@
 		mdiAccountCogOutline,
 		mdiAccountMultipleOutline,
 		mdiBadgeAccountHorizontalOutline,
-		mdiBookAccountOutline,
-		mdiCreditCardOutline,
 		mdiFormatListBulleted,
 		mdiKeyOutline,
 		mdiMessageText,
@@ -25,24 +23,24 @@
 				{ href: '/client/messages/create', label: 'Send Message', icon: mdiMessageText },
 				{ spacer: true },
 				{ href: '/client/messages/campaigns', label: 'All Campaigns', icon: mdiFormatListBulleted },
-				{
+				/* {
 					href: '/client/messages/history',
 					label: 'Sent Messages (Log)',
 					icon: mdiFormatListBulleted
 				},
 				{ href: '/client/messages/scheduled', label: 'Scheduled', icon: mdiFormatListBulleted },
-				{ spacer: true },
+				{ spacer: true }, */
 				{ href: '/client/messages/templates', label: 'Message Templates', icon: mdiMessageText }
 			]
 		},
 		{
 			label: 'Contacts',
 			children: [
-				{
+				/* {
 					href: '/client/contacts/list',
 					label: 'Contacts',
 					icon: mdiAccountMultipleOutline
-				},
+				}, */
 				{
 					href: '/client/contacts/groups',
 					label: 'Contact Groups',
@@ -54,7 +52,7 @@
 		{
 			label: 'Billing',
 			children: [
-				{ href: '/client/billing/topup', label: 'Top Up', icon: mdiSwapVertical },
+				/* { href: '/client/billing/topup', label: 'Top Up', icon: mdiSwapVertical }, */
 				{ href: '/client/billing/history', label: 'Transactions', icon: mdiSwapVertical },
 				{ href: '/client/billing/rates', label: 'My Rates', icon: mdiTagTextOutline }
 			]
@@ -76,7 +74,7 @@
 </script>
 
 <nav class="h-full space-y-2 px-4">
-	{#each nav as link}
+	{#each nav as link (link)}
 		{@render navLink(link)}
 	{/each}
 </nav>

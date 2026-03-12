@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/app/Header.svelte';
 
-	let { data } = $props();
+	// let { data } = $props();
 </script>
 
-<Header title="Users" />
+<Header title="Wallet Top Ups" />

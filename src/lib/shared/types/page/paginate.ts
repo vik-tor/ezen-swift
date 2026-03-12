@@ -32,3 +32,17 @@ export interface PaginationParams {
 	size?: number;
 	sort?: string;
 }
+
+export interface PaginationContext {
+	totalElements: number;
+	totalPages: number;
+	first: boolean;
+	last: boolean;
+	size: number;
+	number: number;
+	numberOfElements: number;
+	empty: boolean;
+	pageNumber?: number;
+	pageSize?: number;
+	offset?: number;
+}

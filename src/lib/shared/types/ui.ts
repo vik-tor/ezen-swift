@@ -4,7 +4,7 @@ export type NavLink = {
 	href?: string;
 	label?: string;
 	icon?: string;
-	roles?: Role[];
+	role?: Role;
 	spacer?: boolean;
 	separator?: boolean;
 	children?: NavLink[];

@@ -9,19 +9,9 @@
 		mdiRefresh
 	} from '@mdi/js';
 
-	import {
-		Button,
-		Card,
-		CardContent,
-		CardDescription,
-		CardHeader,
-		CardTitle,
-		Input,
-		Label,
-		Page
-	} from '$lib/components';
-	import type { PageConfig } from '$lib/shared/types';
+	import { Button, Card, CardContent, Input, Label, Page } from '$lib/components';
 	import Icon from '$lib/components/ui/Icon.svelte';
+	import type { PageConfig } from '$lib/shared/types';
 
 	let { data } = $props();
 

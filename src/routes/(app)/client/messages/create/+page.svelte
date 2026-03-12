@@ -16,13 +16,14 @@
 	let message = $state('');
 	let recipientType = $state('manual');
 	let sendTimeType = $state('now');
-
-	let currentTemplateID = $state();
 	let selectedContactGroups = $state([]);
 
-	let selectedTemplate = $derived(
-		data.templates.find((template) => template.id === currentTemplateID)
-	);
+	function setMessageFromTemplate(templateId: string | number) {
+		const template = data.templates.find((template) => template.id === templateId);
+		if (template) {
+			message = template.content;
+		}
+	}
 </script>
 
 <Header title="Compose Text Message"></Header>
@@ -31,14 +32,14 @@
 	<hr class="my-1 border-base-300" />
 
 	<div class="flex justify-between gap-8">
-		<form class="w-full space-y-3">
+		<form class="w-full space-y-3" method="POST">
 			<div class="flex flex-col gap-3 py-4">
 				<div class="flex items-center gap-2 font-semibold">
 					<Icon path={mdiAccountMultipleOutline} size={18} />
 					<span class="">To</span>
 				</div>
 
-				<FormGroup>
+				<!-- <FormGroup>
 					<div class="flex items-center gap-4">
 						<Radio id="manual" name="recipientType" value="manual" bind:group={recipientType}>
 							Manual Contact(s)
@@ -47,20 +48,20 @@
 							Contact Group(s)
 						</Radio>
 					</div>
+				</FormGroup> -->
+
+				<!-- {#if recipientType === 'manual'} -->
+				<FormGroup>
+					<Input
+						id="contacts"
+						name="manualRecipients"
+						type="text"
+						placeholder="0712345678, +254100234567..."
+					/>
 				</FormGroup>
+				<!-- {/if} -->
 
-				{#if recipientType === 'manual'}
-					<FormGroup>
-						<Input
-							id="contacts"
-							name="contacts"
-							type="text"
-							placeholder="0712345678, +254100234567..."
-						/>
-					</FormGroup>
-				{/if}
-
-				{#if recipientType === 'groups'}
+				<!-- {#if recipientType === 'groups'}
 					<FormGroup>
 						<Select name="contactGroupIds" id="groups">
 							{#each data.contactGroups as contactGroup}
@@ -68,7 +69,7 @@
 							{/each}
 						</Select>
 					</FormGroup>
-				{/if}
+				{/if} -->
 			</div>
 
 			<hr class="my-1 border-base-300" />
@@ -99,7 +100,7 @@
 
 				<FormGroup class="space-y-2">
 					<Label for="sender_id">Template</Label>
-					<Select name="templateId">
+					<Select name="templateId" onSelect={(value) => setMessageFromTemplate(Number(value))}>
 						{#each data.templates as template}
 							<option value={template.id}>{template.name}</option>
 						{/each}
@@ -107,8 +108,8 @@
 				</FormGroup>
 
 				<FormGroup class="space-y-2">
-					<Label for="message">Content <span class="text-error">*</span></Label>
-					<Textarea name="message" class="min-h-30" bind:value={message} required />
+					<Label for="customMessage">Content <span class="text-error">*</span></Label>
+					<Textarea name="customMessage" class="min-h-30" bind:value={message} required />
 					<div class="text-muted-foreground flex justify-between text-xs">
 						<span>{message.length} characters</span>
 						<span>{Math.ceil(message.length / 160) || 1} SMS</span>
@@ -155,8 +156,7 @@
 					<div class="space-y-2">
 						<Label for="schedule">Scheduled day and time</Label>
 						<div class="flex items-center gap-4">
-							<Input name="schedule" type="date" />
-							<Input name="schedule" type="time" />
+							<Input name="scheduledTime" type="datetime-local" />
 						</div>
 					</div>
 				{/if}
@@ -166,7 +166,7 @@
 
 			<div class="mt-8 flex justify-end gap-4">
 				<Button variant="destructive" type="button" onclick={() => history.back()}>Cancel</Button>
-				<Button type="submit">
+				<Button type="submit" class="btn-primary">
 					<Icon path={mdiSend} size={16} class="mr-2" />
 					Send Message
 				</Button>

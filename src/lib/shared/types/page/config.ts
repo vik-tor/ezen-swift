@@ -1,27 +1,51 @@
 import type { SelectOptions } from '../ui';
+import type { Role } from '../domain/roles';
 
 export interface PageConfig {
 	title: string;
-	headerActions?: HeaderAction[];
-	rowActions?: RowAction[];
+	headerActions?: Action[];
+	rowActions?: Action[];
 	columns?: TableColumn[];
 	form?: Form;
 	dataKey?: string;
 	tableTitle?: string;
 }
 
-export interface HeaderAction {
+export interface Action {
+	name?: string;
+	label?: string;
 	icon?: string;
+	altIcon?: string;
 	iconClass?: string;
-	onClick?: () => void;
-	label: string;
 	href?: string;
+	serverAction?: string;
+	onClick?: () => void;
+	confirmed?: boolean;
+	confirmationMessage?: string;
+	isBatch?: boolean;
+	context?: ActionContext;
+	role?: Role;
+	condition?: string;
+	children?: Action[];
+}
+
+export interface ActionContext {
+	title: string;
+	formAction: string;
+	loadEntity?: boolean;
+}
+
+export interface Filter {
+	name: string;
+	label?: string;
+	type: FieldType;
 }
 
 export interface TableColumn {
 	label: string;
 	key: string;
 	style?: string;
+	formatter?: (value: string | number | undefined) => string | undefined;
 	nestedKey?: string;
 }
 
@@ -31,17 +55,8 @@ export interface Form {
 	fields: Field[];
 	entity?: number | string;
 	loadEntity?: boolean;
-	action: string;
-	onCancel?: () => void;
-}
-
-export interface RowAction {
 	action?: string;
-	icon?: string;
-	iconClass?: string;
-	name?: string;
-	showName?: boolean;
-	onClick?: () => void;
+	onCancel?: () => void;
 }
 
 export type FieldType =

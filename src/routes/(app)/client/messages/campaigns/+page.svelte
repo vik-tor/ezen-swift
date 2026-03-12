@@ -10,9 +10,10 @@
 		title: 'SMS Campaigns',
 		headerActions: [
 			{
+				name: 'create',
+				label: 'New Campaign',
 				icon: mdiPlus,
 				iconClass: 'btn-primary',
-				label: 'New Campaign',
 				href: '/client/messages/create'
 			}
 		],
@@ -32,13 +33,7 @@
 				name: 'View',
 				icon: mdiEye,
 				iconClass: 'btn-ghost',
-				onClick: () => {}
-			},
-			{
-				name: 'Delete',
-				icon: mdiTrashCanOutline,
-				iconClass: 'btn-error btn-soft',
-				onClick: () => {}
+				serverAction: 'view'
 			}
 		]
 	};
